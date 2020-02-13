@@ -20,3 +20,13 @@ pipelines:
           - maven
         script: # Modify the commands below to build your repository.
           - mvn package -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn # -B batch mode makes Maven less verbosegi
+
+definitions:
+  services:
+    mysql:
+      image: mysql:5.7
+      variables:
+        MYSQL_DATABASE: 'pipelines'
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+        MYSQL_USER: 'julian_aga'
+        MYSQL_PASSWORD: '123julianaga'
