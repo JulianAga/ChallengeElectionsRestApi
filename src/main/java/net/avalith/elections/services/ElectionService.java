@@ -3,7 +3,6 @@ package net.avalith.elections.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import net.avalith.elections.entities.ElectionRequest;
 import net.avalith.elections.entities.ElectionResponse;
@@ -49,9 +48,8 @@ public class ElectionService {
     ).collect(Collectors.toList());
   }
 
-  public Election findById(Long id_election)
-  {
-    return electionRepository.getOne(id_election);
+  public Election findById(Long idElection) {
+    return electionRepository.getOne(idElection);
   }
 
   private List<ResponseCandidate> getResponseCandidateFromElection(Election election) {

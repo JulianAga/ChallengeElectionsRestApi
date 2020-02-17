@@ -50,9 +50,9 @@ public class ElectionController {
   }
 
   @PostMapping(value = "/{id_election}/vote")
-  public Message vote(@PathVariable Long id_election, @RequestHeader("USER_ID") String user_id,
+  public Message vote(@PathVariable Long idElection, @RequestHeader("USER_ID") String userId,
       @RequestBody VoteRequest voteRequest) {
-    voteService.insert(voteRequest, user_id, id_election);
+    voteService.insert(voteRequest, userId, idElection);
     return new Message("Voto ingresado con éxito");
   }
 
