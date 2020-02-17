@@ -22,7 +22,7 @@ public class UserService {
   }
 
 
-  public User findOne(String id) {
+  public User findById(String id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }

@@ -28,45 +28,64 @@ public class VoteService {
   @Autowired
   private ElectionService electionService;
 
+  public void delete(Long id) {
+    voteRepository.deleteById(id);
+  }
+
+  public Vote findById(Long id) {
+    return voteRepository.findById(id).orElseThrow(() -> new
+        ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
+  }
+
   /**
    * insert method. Insert and save an user
    *
    * @param voteRequest Insert an vote
    */
+
   public ResponseMessage insert(VoteRequest voteRequest, String userId, Long electionId) {
 
     User user = userService.findById(userId);
 
-    if (userHasVoted(user, electionId)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already voted");
-    }
+    Election election = electionService.findOne(electionId);
 
-    Election election = electionService.findById(electionId);
+    if (election == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Error, select a valid election");
+    }
 
     CandidateByElection candidateByElection = getByCandidateAndElection(election,
         voteRequest.getCandidateId());
 
-    voteRepository.save(Vote.builder()
+    Vote vote = Vote.builder()
         .candidateByElection(candidateByElection)
         .user(user)
-        .build());
+        .build();
 
+    if (userHasVoted(user.getVotes(), user, election)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already voted");
+    } else {
+      voteRepository.save(vote);
+    }
     return new ResponseMessage("Vote successfully entered!");
   }
 
   /*** User has voted.
    *Verify if an user has already voted
-¡   * @param user id of the user
-   * @param electionId id of the election
+   * @param votes Votes in database
+   * @param user id of the user
+   * @param election id of the election
    * @return Boolean true if user voted o
    */
-  public Boolean userHasVoted(User user, Long electionId) {
+  public Boolean userHasVoted(List<Vote> votes, User user, Election election) {
 
-    return user.getVotes().stream()
-        .filter(vote -> vote.getUser().equals(user))
-        .filter(vote -> vote.getCandidateByElection().getElection().getId().equals(electionId))
-        .map(vote -> Boolean.TRUE)
-        .findAny().orElse(Boolean.FALSE);
+    return votes.stream().filter(
+        vote -> vote.getUser().equals(user) && vote.getCandidateByElection()
+            .getElection().equals(election)
+    ).map(
+        vote -> Boolean.TRUE
+    ).findAny().orElse(Boolean.FALSE);
+
   }
 
   /*** Get candidate by election.
