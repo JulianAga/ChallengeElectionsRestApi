@@ -1,7 +1,7 @@
 package net.avalith.elections.controllers;
 
 import java.util.List;
-import net.avalith.elections.entities.ResponseCandidate;
+import net.avalith.elections.entities.CandidateResponse;
 import net.avalith.elections.models.Candidate;
 import net.avalith.elections.services.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class CandidateController {
   }
 
   @GetMapping
-  public List<ResponseCandidate> getAll() {
+  public List<CandidateResponse> getAll() {
     return candidateService.getAll();
   }
 

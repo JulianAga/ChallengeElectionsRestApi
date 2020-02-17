@@ -3,7 +3,7 @@ package net.avalith.elections.controllers;
 import java.util.List;
 import net.avalith.elections.entities.ElectionRequest;
 import net.avalith.elections.entities.ElectionResponse;
-import net.avalith.elections.entities.Message;
+import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.entities.VoteRequest;
 import net.avalith.elections.services.ElectionService;
 import net.avalith.elections.services.VoteService;
@@ -49,11 +49,12 @@ public class ElectionController {
     electionService.insert(election);
   }
 
-  @PostMapping(value = "/{id_election}/vote")
-  public Message vote(@PathVariable Long idElection, @RequestHeader("USER_ID") String userId,
+  @PostMapping(value = "/{idElection}/vote")
+  public ResponseMessage vote(@PathVariable Long idElection,
+      @RequestHeader("USER_ID") String userId,
       @RequestBody VoteRequest voteRequest) {
-    voteService.insert(voteRequest, userId, idElection);
-    return new Message("Voto ingresado con éxito");
+
+    return voteService.insert(voteRequest, userId, idElection);
   }
 
   @PutMapping

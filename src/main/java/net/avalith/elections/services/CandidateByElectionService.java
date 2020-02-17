@@ -3,7 +3,7 @@ package net.avalith.elections.services;
 import java.util.List;
 import javax.transaction.Transactional;
 import net.avalith.elections.models.CandidateByElection;
-import net.avalith.elections.repositories.ICandidateByElectionDao;
+import net.avalith.elections.repositories.CandidateByElectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class CandidateByElectionService {
 
   @Autowired
-  ICandidateByElectionDao candidateByElectionRepository;
+  CandidateByElectionRepository candidateByElectionRepository;
 
   @Transactional
   public void delete(Long id) {

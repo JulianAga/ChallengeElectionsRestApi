@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import net.avalith.elections.entities.ElectionRequest;
 import net.avalith.elections.entities.ElectionResponse;
-import net.avalith.elections.entities.ResponseCandidate;
+import net.avalith.elections.entities.CandidateResponse;
 import net.avalith.elections.models.Candidate;
 import net.avalith.elections.models.CandidateByElection;
 import net.avalith.elections.models.Election;
-import net.avalith.elections.repositories.IElectionDao;
+import net.avalith.elections.repositories.ElectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ElectionService {
 
   @Autowired
-  private IElectionDao electionRepository;
+  private ElectionRepository electionRepository;
 
   @Autowired
   private CandidateService candidateService;
@@ -48,14 +48,14 @@ public class ElectionService {
     ).collect(Collectors.toList());
   }
 
-  public Election findById(Long idElection) {
+  public Election findOne(Long idElection) {
     return electionRepository.getOne(idElection);
   }
 
-  private List<ResponseCandidate> getResponseCandidateFromElection(Election election) {
+  private List<CandidateResponse> getResponseCandidateFromElection(Election election) {
 
     return election.getCandidateByElections().stream().map(
-        electionRegistry -> ResponseCandidate.builder()
+        electionRegistry -> CandidateResponse.builder()
             .firstName(electionRegistry.getCandidate().getFirstName())
             .lastName(electionRegistry.getCandidate().getLastName())
             .id(electionRegistry.getCandidate().getId())

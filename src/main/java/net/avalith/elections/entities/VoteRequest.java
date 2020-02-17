@@ -1,6 +1,6 @@
 package net.avalith.elections.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class VoteRequest {
 
   @NotEmpty
-  @JsonFormat(pattern = "candidate_id")
-  Long candidateId;
+  @JsonProperty(value = "candidate_id")
+  private Long candidateId;
 
 }

@@ -1,10 +1,10 @@
 package net.avalith.elections.repositories;
 
-import net.avalith.elections.models.Election;
+import net.avalith.elections.models.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IElectionDao extends JpaRepository<Election, Long> {
+public interface VoteRepository extends JpaRepository<Vote, Long> {
 
 }

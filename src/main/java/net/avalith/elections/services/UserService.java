@@ -5,7 +5,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.UUID;
 import net.avalith.elections.models.User;
-import net.avalith.elections.repositories.IUserDao;
+import net.avalith.elections.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,14 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
   @Autowired
-  IUserDao userRepository;
+  UserRepository userRepository;
 
   public void delete(String id) {
     userRepository.deleteById(id);
   }
 
 
-  public User findOne(String id) {
+  public User findById(String id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }
