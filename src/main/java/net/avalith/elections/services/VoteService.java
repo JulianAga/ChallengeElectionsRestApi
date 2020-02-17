@@ -47,45 +47,36 @@ public class VoteService {
 
     User user = userService.findById(userId);
 
-    Election election = electionService.findOne(electionId);
-
-    if (election == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          "Error, select a valid election");
+    if (userHasVoted(user, electionId)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already voted");
     }
+
+    Election election = electionService.findById(electionId);
 
     CandidateByElection candidateByElection = getByCandidateAndElection(election,
         voteRequest.getCandidateId());
 
-    Vote vote = Vote.builder()
+    voteRepository.save(Vote.builder()
         .candidateByElection(candidateByElection)
         .user(user)
-        .build();
+        .build());
 
-    if (userHasVoted(user.getVotes(), user, election)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already voted");
-    } else {
-      voteRepository.save(vote);
-    }
     return new ResponseMessage("Vote successfully entered!");
   }
 
   /*** User has voted.
    *Verify if an user has already voted
-   * @param votes Votes in database
-   * @param user id of the user
-   * @param election id of the election
+¡   * @param user id of the user
+   * @param electionId id of the election
    * @return Boolean true if user voted o
    */
-  public Boolean userHasVoted(List<Vote> votes, User user, Election election) {
+  public Boolean userHasVoted(User user, Long electionId) {
 
-    return votes.stream().filter(
-        vote -> vote.getUser().equals(user) && vote.getCandidateByElection()
-            .getElection().equals(election)
-    ).map(
-        vote -> Boolean.TRUE
-    ).findAny().orElse(Boolean.FALSE);
-
+    return user.getVotes().stream()
+        .filter(vote -> vote.getUser().equals(user))
+        .filter(vote -> vote.getCandidateByElection().getElection().getId().equals(electionId))
+        .map(vote -> Boolean.TRUE)
+        .findAny().orElse(Boolean.FALSE);
   }
 
   /*** Get candidate by election.
