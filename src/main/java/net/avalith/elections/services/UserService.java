@@ -5,28 +5,28 @@ import java.time.Period;
 import java.util.List;
 import java.util.UUID;
 import net.avalith.elections.models.User;
-import net.avalith.elections.repositories.UserRepository;
+import net.avalith.elections.repositories.IUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService {
 
   @Autowired
-  UserRepository userRepository;
+  IUserDao userRepository;
 
-  public void delete(String id) {
-    try {
-      userRepository.deleteById(id);
-    } catch (ResponseStatusException ex) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not a valid user", ex);
-    }
+  @Autowired
+  RestTemplate restTemplate;
+
+  public void delete(Long id) {
+    userRepository.deleteById(id);
   }
 
 
-  public User findById(String id) {
+  public User findOne(Long id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }
@@ -55,5 +55,12 @@ public class UserService {
   public Integer calculateAge(LocalDate startDate) {
     Period p = Period.between(startDate, LocalDate.now());
     return p.getYears();
+  }
+
+  public void insertFakeUsers(Long quantity) {
+    String userApi = "https://randomuser.me/api/";
+
+     List users = restTemplate.getForObject(userApi + "?results=" + quantity,List.class);
+
   }
 }
