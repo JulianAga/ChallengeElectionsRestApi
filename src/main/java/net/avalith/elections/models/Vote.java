@@ -1,6 +1,6 @@
 package net.avalith.elections.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,25 +19,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Entity
-@Table(name = "candidates_by_elections")
-public class CandidateByElection {
+@Table(name = "votes")
+public class Vote {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonProperty(value = "id_vote")
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "election_id")
-  @JsonIgnore
-  private Election election;
+  @JoinColumn(name = "candidate_by_election_id")
+  private CandidateByElection candidateByElection;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "candidate_id")
-  @JsonIgnore
-  private Candidate candidate;
+  @JoinColumn(name = "user_id")
+  private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "vote_id")
-  @JsonIgnore
-  private Vote vote;
+
 }

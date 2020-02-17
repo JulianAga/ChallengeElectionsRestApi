@@ -17,13 +17,12 @@ public class UserService {
   @Autowired
   IUserDao userRepository;
 
-
-  public void delete(Long id) {
+  public void delete(String id) {
     userRepository.deleteById(id);
   }
 
 
-  public User findOne(Long id) {
+  public User findOne(String id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }
