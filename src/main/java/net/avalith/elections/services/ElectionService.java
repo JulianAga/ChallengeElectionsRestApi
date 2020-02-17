@@ -48,8 +48,9 @@ public class ElectionService {
     ).collect(Collectors.toList());
   }
 
-  public Election findOne(Long idElection) {
-    return electionRepository.getOne(idElection);
+  public Election findById(Long idElection) {
+    return electionRepository.findById(idElection)
+        .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"No esta"));
   }
 
   private List<CandidateResponse> getResponseCandidateFromElection(Election election) {
