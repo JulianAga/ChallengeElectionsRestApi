@@ -18,15 +18,11 @@ public class UserService {
   UserRepository userRepository;
 
   public void delete(String id) {
-    try {
-      userRepository.deleteById(id);
-    } catch (ResponseStatusException ex) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not a valid user", ex);
-    }
+    userRepository.deleteById(id);
   }
 
 
-  public User findById(String id) {
+  public User findOne(String id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }
