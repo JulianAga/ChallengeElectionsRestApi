@@ -9,6 +9,7 @@ import net.avalith.elections.repositories.IUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -17,6 +18,8 @@ public class UserService {
   @Autowired
   IUserDao userRepository;
 
+  @Autowired
+  RestTemplate restTemplate;
 
   public void delete(Long id) {
     userRepository.deleteById(id);
@@ -52,5 +55,12 @@ public class UserService {
   public Integer calculateAge(LocalDate startDate) {
     Period p = Period.between(startDate, LocalDate.now());
     return p.getYears();
+  }
+
+  public void insertFakeUsers(Long quantity) {
+    String userApi = "https://randomuser.me/api/";
+
+     List users = restTemplate.getForObject(userApi + "?results=" + quantity,List.class);
+
   }
 }
