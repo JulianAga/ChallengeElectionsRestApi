@@ -8,10 +8,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Data
 public class ElectionResponse {
 
   private Long id;
@@ -23,5 +23,6 @@ public class ElectionResponse {
   private LocalDateTime endDate;
 
   @JsonProperty(value = "candidates")
-  private List<CandidateResponse> candidates;
+  private List<ResponseCandidate> candidates;
+
 }

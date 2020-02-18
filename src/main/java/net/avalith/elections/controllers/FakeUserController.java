@@ -1,5 +1,10 @@
 package net.avalith.elections.controllers;
 
+import java.io.IOException;
+import java.util.List;
+import net.avalith.elections.entities.FakeUser;
+import net.avalith.elections.entities.FakeUserRequest;
+import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +21,8 @@ public class FakeUserController {
   private UserService userService;
 
   @PostMapping("")
-  public void insert(@RequestBody Long quantity) {
-    userService.insertFakeUsers(quantity);
+  public ResponseMessage insert(@RequestBody FakeUserRequest fakeUserRequest) throws IOException {
+    return userService.insertFakeUsers(fakeUserRequest.getQuantity());
   }
 
 }
