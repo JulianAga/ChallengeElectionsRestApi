@@ -57,4 +57,8 @@ public class User implements Serializable {
   @NotEmpty
   private String lastName;
 
+  @Column(name = "is_fake")
+  @JsonProperty(value = "is_fake")
+  private Boolean isFake;
+
 }

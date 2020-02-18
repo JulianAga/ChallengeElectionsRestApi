@@ -1,16 +1,26 @@
 package net.avalith.elections.services;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import net.avalith.elections.entities.FakeUsers;
+import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.models.User;
+import net.avalith.elections.repositories.FakeUserDao;
 import net.avalith.elections.repositories.IUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
+import retrofit2.Call;
+import retrofit2.Response;
+
 
 @Service
 public class UserService {
@@ -19,7 +29,7 @@ public class UserService {
   IUserDao userRepository;
 
   @Autowired
-  RestTemplate restTemplate;
+  private FakeUserDao fakeUsers;
 
   public void delete(Long id) {
     userRepository.deleteById(id);
@@ -43,8 +53,13 @@ public class UserService {
    */
 
   public void insert(User user) {
-    user.setAge(calculateAge(user.getDayOfBirth()));
-    user.setId(UUID.randomUUID().toString());
+    if (user.getAge() == null) {
+      user.setAge(calculateAge(user.getDayOfBirth()));
+    }
+    if (user.getId() == null) {
+      user.setId(UUID.randomUUID().toString());
+      user.setIsFake(false);
+    }
     try {
       userRepository.save(user);
     } catch (ResponseStatusException ex) {
@@ -57,10 +72,47 @@ public class UserService {
     return p.getYears();
   }
 
-  public void insertFakeUsers(Long quantity) {
-    String userApi = "https://randomuser.me/api/";
+  /**Insert fake users.
+   * Insert an amount of fake users
+   * @param quantity amount of users to create
+   * @return success message
+   * @throws IOException for get users
+   */
+  public ResponseMessage insertFakeUsers(Long quantity) throws IOException {
 
-     List users = restTemplate.getForObject(userApi + "?results=" + quantity,List.class);
+    if (quantity < 1) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Error, insert a valid quantity of users");
+    }
 
+    Call<FakeUsers> allUsers = fakeUsers.getFakeUsers(quantity);
+    Response<FakeUsers> execute = allUsers.execute();
+    FakeUsers fakeUsersList = execute.body();
+
+    assert fakeUsersList != null;
+    List<User> users = fakeUsersList.getFakeUserList()
+        .stream()
+        .map(user ->
+            User.builder()
+                .firstName(user.getFakeUserName().getFirst())
+                .lastName(user.getFakeUserName().getLast())
+                .age(user.getFakeUserDob().getAge())
+                .dayOfBirth(ZonedDateTime.parse(user.getFakeUserDob().getDate()).toLocalDate())
+                .email(user.getEmail())
+                .id(user.getFakeUserLogin().getUuid())
+                .isFake(true)
+                .build())
+        .collect(Collectors.toList());
+
+    AtomicInteger i = new AtomicInteger();
+
+    users.forEach(user -> {
+          if (Pattern.matches("^[A-Za-z0-9_.]+$", user.getFirstName())) {
+            this.insert(user);
+            i.getAndIncrement();
+          }
+        }
+    );
+    return new ResponseMessage(i + " usuarios de " + quantity + " creados correctamente");
   }
 }
