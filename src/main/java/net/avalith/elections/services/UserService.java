@@ -18,7 +18,11 @@ public class UserService {
   UserRepository userRepository;
 
   public void delete(String id) {
-    userRepository.deleteById(id);
+    try {
+      userRepository.deleteById(id);
+    } catch (ResponseStatusException ex) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not a valid user", ex);
+    }
   }
 
 

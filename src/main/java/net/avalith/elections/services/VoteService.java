@@ -28,21 +28,11 @@ public class VoteService {
   @Autowired
   private ElectionService electionService;
 
-  public void delete(Long id) {
-    voteRepository.deleteById(id);
-  }
-
-  public Vote findById(Long id) {
-    return voteRepository.findById(id).orElseThrow(() -> new
-        ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
-  }
-
   /**
    * insert method. Insert and save an user
    *
    * @param voteRequest Insert an vote
    */
-
   public ResponseMessage insert(VoteRequest voteRequest, String userId, Long electionId) {
 
     User user = userService.findById(userId);
