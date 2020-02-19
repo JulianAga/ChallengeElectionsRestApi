@@ -16,10 +16,8 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FakeUserDob {
 
-  @JsonProperty("date")
   private String date;
 
-  @JsonProperty("age")
   private Integer age;
 
 

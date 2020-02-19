@@ -24,7 +24,7 @@ import retrofit2.Response;
 public class UserService {
 
   @Autowired
-  IUserDao userRepository;
+  private IUserDao userRepository;
 
   @Autowired
   private RandomUserService fakeUsers;

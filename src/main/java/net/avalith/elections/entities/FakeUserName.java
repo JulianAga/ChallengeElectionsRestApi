@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 public class FakeUserName {
 
   @JsonProperty("first")
-  private String first;
+  private String firstName;
 
   @JsonProperty("last")
-  private String last;
+  private String lastName;
 
 }

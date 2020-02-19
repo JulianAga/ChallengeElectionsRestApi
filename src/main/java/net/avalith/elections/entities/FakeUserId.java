@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FakeUserId {
 
-  @JsonProperty("name")
   private String name;
 
 }
