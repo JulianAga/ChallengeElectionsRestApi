@@ -8,7 +8,7 @@ import retrofit2.Retrofit.Builder;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 @Configuration
-public class AppConfig {
+public class RandomUserRetrofitConfiguration {
 
   /***retrofitConfig.
    * Construct the retrofit
@@ -22,5 +22,6 @@ public class AppConfig {
         .build();
     return retrofit.create(RandomUserService.class);
   }
+
 
 }
