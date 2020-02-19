@@ -34,7 +34,7 @@ public class UserService {
   }
 
 
-  public User findOne(Long id) {
+  public User findOne(String id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }
@@ -58,6 +58,18 @@ public class UserService {
     } catch (ResponseStatusException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not a valid user", ex);
     }
+  }
+
+  public void update(User newUser, String id){
+
+    User oldUser = this.findOne(id);
+    oldUser.setFirstName(newUser.getFirstName());
+    oldUser.setLastName(newUser.getLastName());
+    oldUser.setAge(newUser.getAge());
+    oldUser.setEmail(newUser.getEmail());
+    oldUser.setDayOfBirth(newUser.getDayOfBirth());
+
+    this.userRepository.save(oldUser);
   }
 
   public Integer calculateAge(LocalDate startDate) {
@@ -91,8 +103,8 @@ public class UserService {
           .stream()
           .map(user ->
               User.builder()
-                  .firstName(user.getFakeUserName().getFirst())
-                  .lastName(user.getFakeUserName().getLast())
+                  .firstName(user.getFakeUserName().getFirstName())
+                  .lastName(user.getFakeUserName().getLastName())
                   .age(user.getFakeUserDob().getAge())
                   .dayOfBirth(ZonedDateTime.parse(user.getFakeUserDob().getDate()).toLocalDate())
                   .email(user.getEmail())
