@@ -1,6 +1,6 @@
 package net.avalith.elections.config;
 
-import net.avalith.elections.repositories.FakeUserDao;
+import net.avalith.elections.services.RandomUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
@@ -15,12 +15,12 @@ public class AppConfig {
    * @return return interface to create users
    */
   @Bean("fakeUsers")
-  public FakeUserDao retroFitConfiguration() {
+  public RandomUserService randomUserRetrofitConfiguration() {
     Retrofit retrofit = new Builder()
         .baseUrl("https://randomuser.me/")
         .addConverterFactory(JacksonConverterFactory.create())
         .build();
-    return retrofit.create(FakeUserDao.class);
+    return retrofit.create(RandomUserService.class);
   }
 
 }

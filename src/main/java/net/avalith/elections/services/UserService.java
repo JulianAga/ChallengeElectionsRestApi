@@ -5,14 +5,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import net.avalith.elections.entities.FakeUsers;
 import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.models.User;
-import net.avalith.elections.repositories.FakeUserDao;
 import net.avalith.elections.repositories.IUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +27,7 @@ public class UserService {
   IUserDao userRepository;
 
   @Autowired
-  private FakeUserDao fakeUsers;
+  private RandomUserService fakeUsers;
 
   public void delete(Long id) {
     userRepository.deleteById(id);
@@ -52,16 +50,11 @@ public class UserService {
    * @param user Insert an user to be search
    */
 
-  public void insert(User user) {
-    if (user.getAge() == null) {
-      user.setAge(calculateAge(user.getDayOfBirth()));
-    }
-    if (user.getId() == null) {
-      user.setId(UUID.randomUUID().toString());
-      user.setIsFake(false);
-    }
+  public User insert(User user) {
+    user.setAge(calculateAge(user.getDayOfBirth()));
+    user.setId(UUID.randomUUID().toString());
     try {
-      userRepository.save(user);
+      return userRepository.save(user);
     } catch (ResponseStatusException ex) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "not a valid user", ex);
     }
@@ -72,8 +65,9 @@ public class UserService {
     return p.getYears();
   }
 
-  /**Insert fake users.
-   * Insert an amount of fake users
+  /**
+   * Insert fake users. Insert an amount of fake users
+   *
    * @param quantity amount of users to create
    * @return success message
    * @throws IOException for get users
@@ -86,33 +80,32 @@ public class UserService {
     }
 
     Call<FakeUsers> allUsers = fakeUsers.getFakeUsers(quantity);
-    Response<FakeUsers> execute = allUsers.execute();
-    FakeUsers fakeUsersList = execute.body();
+    Response<FakeUsers> response = allUsers.execute();
+    FakeUsers fakeUsersList = Optional.ofNullable(response.body()).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user cannot be null"));
 
-    assert fakeUsersList != null;
-    List<User> users = fakeUsersList.getFakeUserList()
-        .stream()
-        .map(user ->
-            User.builder()
-                .firstName(user.getFakeUserName().getFirst())
-                .lastName(user.getFakeUserName().getLast())
-                .age(user.getFakeUserDob().getAge())
-                .dayOfBirth(ZonedDateTime.parse(user.getFakeUserDob().getDate()).toLocalDate())
-                .email(user.getEmail())
-                .id(user.getFakeUserLogin().getUuid())
-                .isFake(true)
-                .build())
-        .collect(Collectors.toList());
+    if(!response.isSuccessful()) {
+      throw new ResponseStatusException( HttpStatus.INTERNAL_SERVER_ERROR ,"error inserting fake users");
+    } else {
+      Long userQuantity = fakeUsersList.getFakeUserList()
+          .stream()
+          .map(user ->
+              User.builder()
+                  .firstName(user.getFakeUserName().getFirst())
+                  .lastName(user.getFakeUserName().getLast())
+                  .age(user.getFakeUserDob().getAge())
+                  .dayOfBirth(ZonedDateTime.parse(user.getFakeUserDob().getDate()).toLocalDate())
+                  .email(user.getEmail())
+                  .id(user.getFakeUserLogin().getUuid())
+                  .isFake(true)
+                  .build())
+          .filter(
+              user -> Pattern.matches("^[A-Za-z0-9_.]+$", user.getFirstName())
+          ).map(this::insert)
+          .count();
 
-    AtomicInteger i = new AtomicInteger();
-
-    users.forEach(user -> {
-          if (Pattern.matches("^[A-Za-z0-9_.]+$", user.getFirstName())) {
-            this.insert(user);
-            i.getAndIncrement();
-          }
-        }
-    );
-    return new ResponseMessage(i + " usuarios de " + quantity + " creados correctamente");
+      return new ResponseMessage(
+          userQuantity + " usuarios de " + quantity + " creados correctamente");
+    }
   }
 }
