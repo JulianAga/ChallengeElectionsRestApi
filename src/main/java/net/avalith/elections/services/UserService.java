@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import net.avalith.elections.entities.FakeUsers;
 import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.models.User;
-import net.avalith.elections.repositories.IUserDao;
+import net.avalith.elections.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,12 +24,12 @@ import retrofit2.Response;
 public class UserService {
 
   @Autowired
-  private IUserDao userRepository;
+  private UserRepository userRepository;
 
   @Autowired
   private RandomUserService fakeUsers;
 
-  public void delete(Long id) {
+  public void delete(String id) {
     userRepository.deleteById(id);
   }
 
@@ -60,7 +60,7 @@ public class UserService {
     }
   }
 
-  public void update(User newUser, String id){
+  public void update(User newUser, String id) {
 
     User oldUser = this.findOne(id);
     oldUser.setFirstName(newUser.getFirstName());
@@ -94,10 +94,11 @@ public class UserService {
     Call<FakeUsers> allUsers = fakeUsers.getFakeUsers(quantity);
     Response<FakeUsers> response = allUsers.execute();
     FakeUsers fakeUsersList = Optional.ofNullable(response.body()).orElseThrow(
-          () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user cannot be null"));
+        () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "the user cannot be null"));
 
-    if(!response.isSuccessful()) {
-      throw new ResponseStatusException( HttpStatus.INTERNAL_SERVER_ERROR ,"error inserting fake users");
+    if (!response.isSuccessful()) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+          "error inserting fake users");
     } else {
       Long userQuantity = fakeUsersList.getFakeUserList()
           .stream()
