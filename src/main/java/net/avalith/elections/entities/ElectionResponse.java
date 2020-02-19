@@ -23,5 +23,5 @@ public class ElectionResponse {
   private LocalDateTime endDate;
 
   @JsonProperty(value = "candidates")
-  private List<ResponseCandidate> candidates;
+  private List<CandidateResponse> candidates;
 }

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IElectionDao extends JpaRepository<Election, Long> {
+public interface ElectionRepository extends JpaRepository<Election, Long> {
 
 }

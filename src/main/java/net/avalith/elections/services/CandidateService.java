@@ -3,9 +3,9 @@ package net.avalith.elections.services;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
-import net.avalith.elections.entities.ResponseCandidate;
+import net.avalith.elections.entities.CandidateResponse;
 import net.avalith.elections.models.Candidate;
-import net.avalith.elections.repositories.ICandidateDao;
+import net.avalith.elections.repositories.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class CandidateService {
 
-  @SuppressWarnings("checkstyle:MemberName")
   @Autowired
-  private ICandidateDao candidateRepository;
+  private CandidateRepository candidateRepository;
 
   @Transactional
   public void delete(Long id) {
@@ -38,10 +37,10 @@ public class CandidateService {
    * get a list of all the candidates
    * @return List Response candidate
    */
-  public List<ResponseCandidate> getAll() {
+  public List<CandidateResponse> getAll() {
     return candidateRepository.findAll().stream().map(
         candidate ->
-            ResponseCandidate.builder()
+            CandidateResponse.builder()
             .firstName(candidate.getFirstName())
             .lastName(candidate.getLastName())
             .id(candidate.getId())

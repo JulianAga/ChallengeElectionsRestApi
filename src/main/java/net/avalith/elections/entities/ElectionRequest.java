@@ -26,7 +26,7 @@ public class ElectionRequest {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime endDate;
 
-  @JsonProperty(value = "candidates_ids")
+  @JsonProperty(value = "candidate_ids")
   private List<Long> candidates;
 
 }
