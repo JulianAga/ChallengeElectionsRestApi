@@ -18,6 +18,6 @@ import lombok.NoArgsConstructor;
 public class FakeUsers {
 
   @JsonProperty("results")
-  private List<FakeUser> fakeUserList;
+  public List<FakeUser> fakeUserList;
 
 }

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -59,6 +60,6 @@ public class User implements Serializable {
 
   @Column(name = "is_fake")
   @JsonProperty(value = "is_fake")
-  private Boolean isFake;
+  private Boolean isFake = false;
 
 }
