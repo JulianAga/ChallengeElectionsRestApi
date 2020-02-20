@@ -54,7 +54,7 @@ public class UserController {
     // Nothing to do
   }
 
-  @Scheduled(cron = "0 * * * * ?")
+  @Scheduled(cron = "${day.totaltime}")
   public void actualizateAge() {
     userService.reasignAge();
   }
