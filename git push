@@ -1,0 +1,141 @@
+[33mcommit 280a057d06867449951e02c9c43662b165fc5ced[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m, [m[1;31morigin/feature/UsuariosFalsos[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mfeature/UsuariosFalsos[m[33m)[m
+Merge: a587320 784c6ae
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Wed Feb 19 16:52:02 2020 -0300
+
+    Merge remote-tracking branch 'origin/feature/UsuariosFalsos' into feature/UsuariosFalsos
+    
+    # Conflicts:
+    #       src/main/java/net/avalith/elections/entities/ElectionResponse.java
+    #       src/main/java/net/avalith/elections/services/UserService.java
+
+[33mcommit a587320bb546a5a3575b588d07b6b1d8d59fa992[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Wed Feb 19 16:47:52 2020 -0300
+
+    Conflictos solucionados
+
+[33mcommit f744a0b3f1139c790439dbb65e2babe34b483b59[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Wed Feb 19 16:40:58 2020 -0300
+
+    last commit
+
+[33mcommit 0b1ca4581ea0bb686cf280b7819ff939a612f873[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Wed Feb 19 10:53:49 2020 -0300
+
+    Ultimas correcciones usuarios falsos
+
+[33mcommit f559e80e5a949a73ca05f5f4d6bb8bfdbda6c189[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Wed Feb 19 10:21:32 2020 -0300
+
+    Usuarios falsos corregido
+
+[33mcommit 4c64a7cfd086d1e0c64ff00d0f4da7c40c42951c[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Tue Feb 18 16:00:22 2020 -0300
+
+    Terminado FakeUsers
+
+[33mcommit c4193553367d832aac575151d03aed5d7801f489[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Mon Feb 17 12:09:01 2020 -0300
+
+    inicio Usuarios falsos
+
+[33mcommit 8ac4f5ee236252f82e884f9f789da01abf3388ce[m[33m ([m[1;32mfeature/ActualizarEdad[m[33m)[m
+Author: Julián <julianulisesaga@gmail.com>
+Date:   Wed Feb 19 13:55:49 2020 +0000
+
+    Merged in feature/Votar (pull request #3)
+    
+    Feature/Votar
+    
+    * feature votar terminado
+    
+    * Corregido por checkstyle
+    
+    * Correcciones Bitbucket
+    
+    * Correcciones Bitbucket
+    
+    * Capturando excepciones faltantes
+    
+    Approved-by: MoyaF <fausto@avalith.net>
+    Approved-by: Matias Tassara <matiast@avalith.net>
+
+[33mcommit 784c6ae2549c7297482044e25e114d8d5386cda9[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Wed Feb 19 10:53:49 2020 -0300
+
+    Ultimas correcciones usuarios falsos
+
+[33mcommit 68044b7984dd5fcf2d88b2987c5bc4f1a6b1fb3b[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Wed Feb 19 10:21:32 2020 -0300
+
+    Usuarios falsos corregido
+
+[33mcommit f05063ce77accae46d70a7637fe2bf4ef05cf02e[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Tue Feb 18 16:00:22 2020 -0300
+
+    Terminado FakeUsers
+
+[33mcommit 635c5e8f532581f53eb5942737ee5f3b22815655[m
+Author: JulianAga <48849848+JulianAga@users.noreply.github.com>
+Date:   Mon Feb 17 12:09:01 2020 -0300
+
+    inicio Usuarios falsos
+
+[33mcommit 1f8a9cdee360505df60eedd6136410c15f42f57f[m
+Author: Julián <julianulisesaga@gmail.com>
+Date:   Thu Feb 13 15:57:24 2020 +0000
+
+    Merged in crearUsuario (pull request #2)
+    
+    CrearUsuario
+    
+    * Initial Bitbucket Pipelines configuration
+    
+    * Models Views Controllers and Services created
+    
+    * Corregido usuario
+    
+    * Correcciones de service y añadido mysql al pipeline
+    
+    * Crear candidato terminado
+    
+    * Corregido espacio de una linea en modelo candidato
+    
+    * Terminado election y mensajes de error para cada modelo
+    
+    * Correccion JavaDocs y nombres de repositorios
+    
+    * Cambiado el dialecto a mysql5 para bitbucket
+    
+    * Cambio a MySQL8Dialect
+    
+    * User y Password eliminado de application properties
+    
+    * Agregados drivers jdbc
+    
+    * Agregados drivers y url jdbc
+    
+    * Cambios en application properties
+    
+    * Borrado de funciones innecesarias y acotado de lineas
+    
+    * Arreglos en application properties
+    
+    * Eliminado save de election
+    
+    Approved-by: MoyaF <fausto@avalith.net>
+
+[33mcommit 5a5673993a7527b3321bee76584a691b6d6e2dd4[m
+Author: = <=>
+Date:   Thu Feb 6 09:55:33 2020 -0300
+
+    initial commit

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import net.avalith.elections.entities.FakeUsers;
 import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.models.User;
@@ -34,7 +35,7 @@ public class UserService {
   }
 
 
-  public User findOne(String id) {
+  public User findById(String id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }
@@ -62,7 +63,7 @@ public class UserService {
 
   public void update(User newUser, String id) {
 
-    User oldUser = this.findOne(id);
+    User oldUser = this.findById(id);
     oldUser.setFirstName(newUser.getFirstName());
     oldUser.setLastName(newUser.getLastName());
     oldUser.setAge(newUser.getAge());
@@ -120,5 +121,20 @@ public class UserService {
       return new ResponseMessage(
           userQuantity + " usuarios de " + quantity + " creados correctamente");
     }
+  }
+
+  public List<User> getTodayBirthdays() {
+    return this.getAll().stream()
+        .filter(c -> !calculateAge(c.getDayOfBirth()).equals(c.getAge()))
+        .collect(Collectors.toList());
+  }
+
+  public void reasignAge() {
+    this.getTodayBirthdays().forEach(c -> {
+          c.setAge(this.calculateAge(c.getDayOfBirth()));
+          this.update(c, c.getId());
+        }
+    );
+
   }
 }

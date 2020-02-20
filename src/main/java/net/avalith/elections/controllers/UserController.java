@@ -6,6 +6,7 @@ import net.avalith.elections.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,4 +53,10 @@ public class UserController {
   public void conflict() {
     // Nothing to do
   }
+
+  @Scheduled(cron = "0 * * * * ?")
+  public void actualizateAge() {
+    userService.reasignAge();
+  }
+
 }
