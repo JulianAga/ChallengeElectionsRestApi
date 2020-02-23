@@ -50,7 +50,7 @@ public class ElectionService {
 
   public Election findById(Long idElection) {
     return electionRepository.findById(idElection)
-        .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"No esta"));
+        .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"The election doesn't exist"));
   }
 
   private List<CandidateResponse> getResponseCandidateFromElection(Election election) {
