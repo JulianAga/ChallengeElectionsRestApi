@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import net.avalith.elections.entities.CandidateResponse;
+import net.avalith.elections.entities.CandidateWithVotesResponse;
 import net.avalith.elections.entities.ElectionRequest;
 import net.avalith.elections.entities.ElectionResponse;
-import net.avalith.elections.entities.CandidateResponse;
+import net.avalith.elections.entities.ElectionResultResponse;
 import net.avalith.elections.models.Candidate;
 import net.avalith.elections.models.CandidateByElection;
 import net.avalith.elections.models.Election;
@@ -29,6 +31,9 @@ public class ElectionService {
   @Autowired
   private CandidateByElectionService candidateByElectionService;
 
+  @Autowired
+  private VoteService voteService;
+
   public void delete(Long id) {
     electionRepository.deleteById(id);
   }
@@ -50,7 +55,7 @@ public class ElectionService {
 
   public Election findById(Long idElection) {
     return electionRepository.findById(idElection)
-        .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"No esta"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No esta"));
   }
 
   private List<CandidateResponse> getResponseCandidateFromElection(Election election) {
@@ -126,5 +131,30 @@ public class ElectionService {
     }
 
     return response;
+  }
+
+  public ElectionResultResponse getElectionResultResponse(Long idElection) {
+
+    return ElectionResultResponse.builder()
+        .id(idElection)
+        .candidates(getCandidatesFromElection(idElection))
+        .totalVotes(voteService.getVotesByElection(idElection))
+        .build();
+  }
+
+  public List<CandidateWithVotesResponse> getCandidatesFromElection(Long idElection) {
+
+    List<CandidateByElection> candidateByElections = electionRepository.findById(idElection)
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "The election doesn't exist"))
+        .getCandidateByElections();
+
+    return candidateByElections.stream().map(
+        candidateByElection -> CandidateWithVotesResponse.builder()
+            .id(candidateByElection.getCandidate().getId())
+            .firstName(candidateByElection.getCandidate().getFirstName())
+            .lastName(candidateByElection.getCandidate().getLastName())
+            .votes(voteService.getVotesByCandidateByElection(candidateByElection.getId()))
+            .build()).collect(Collectors.toList());
   }
 }

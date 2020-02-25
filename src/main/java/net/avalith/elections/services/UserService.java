@@ -34,7 +34,7 @@ public class UserService {
   }
 
 
-  public User findOne(String id) {
+  public User findById(String id) {
     return userRepository.findById(id).orElseThrow(() -> new
         ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct user Id"));
   }
@@ -62,7 +62,7 @@ public class UserService {
 
   public void update(User newUser, String id) {
 
-    User oldUser = this.findOne(id);
+    User oldUser = this.findById(id);
     oldUser.setFirstName(newUser.getFirstName());
     oldUser.setLastName(newUser.getLastName());
     oldUser.setAge(newUser.getAge());

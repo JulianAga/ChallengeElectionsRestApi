@@ -56,7 +56,7 @@ public class VoteService {
 
   /*** User has voted.
    *Verify if an user has already voted
-¡   * @param user id of the user
+   ¡   * @param user id of the user
    * @param electionId id of the election
    * @return Boolean true if user voted o
    */
@@ -83,5 +83,17 @@ public class VoteService {
         candidateByElection -> candidateByElection.getCandidate().getId().equals(idCandidate)
     ).findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
         "The candidate does not exists!"));
+  }
+
+  public Long getVotesByCandidateByElection(Long idCandidateByElection) {
+    return voteRepository.findAll().stream().filter(
+        vote -> vote.getCandidateByElection().getId().equals(idCandidateByElection)
+    ).count();
+  }
+
+  public Long getVotesByElection(Long idElection) {
+    return voteRepository.findAll().stream().filter(
+        vote -> vote.getCandidateByElection().getElection().getId().equals(idElection)
+    ).count();
   }
 }

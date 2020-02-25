@@ -3,6 +3,7 @@ package net.avalith.elections.controllers;
 import java.util.List;
 import net.avalith.elections.entities.ElectionRequest;
 import net.avalith.elections.entities.ElectionResponse;
+import net.avalith.elections.entities.ElectionResultResponse;
 import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.entities.VoteRequest;
 import net.avalith.elections.services.ElectionService;
@@ -70,4 +71,8 @@ public class ElectionController {
     // Nothing to do
   }
 
+  @GetMapping(value = "/{idElection}")
+  public ElectionResultResponse getElectionResultResponse(@PathVariable Long idElection) {
+    return electionService.getElectionResultResponse(idElection);
+  }
 }
