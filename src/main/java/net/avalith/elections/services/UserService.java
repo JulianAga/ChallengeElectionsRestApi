@@ -1,5 +1,6 @@
 package net.avalith.elections.services;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -124,14 +125,15 @@ public class UserService {
   }
 
   public List<User> getTodayBirthdays() {
-    return this.getAll().stream()
+    List<User> users = this.getAll().stream()
         .filter(c -> !calculateAge(c.getDayOfBirth()).equals(c.getAge()))
         .collect(Collectors.toList());
+    users.forEach(c-> c.setAge(this.calculateAge(c.getDayOfBirth())));
+    return users;
   }
 
   public void reasignAge() {
     this.getTodayBirthdays().forEach(c -> {
-          c.setAge(this.calculateAge(c.getDayOfBirth()));
           this.update(c, c.getId());
         }
     );
