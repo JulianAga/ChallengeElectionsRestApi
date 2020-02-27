@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import net.avalith.elections.entities.FakeUsers;
 import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.models.User;
@@ -120,5 +121,13 @@ public class UserService {
       return new ResponseMessage(
           userQuantity + " usuarios de " + quantity + " creados correctamente");
     }
+  }
+
+  public List<User> getFakeUsers() {
+    return userRepository.findAll().stream().filter(
+        User::getIsFake
+    ).collect(
+            Collectors.toList());
+
   }
 }

@@ -82,7 +82,16 @@ public class VoteService {
     return candidateByElections.stream().filter(
         candidateByElection -> candidateByElection.getCandidate().getId().equals(idCandidate)
     ).findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-        "The candidate does not exists!"));
+        "The candidate does not exist!"));
+  }
+
+  public void voteCandidateWithFakeVotes(Long idElection, VoteRequest fakeVoteRequest) {
+    userService.getFakeUsers().stream().filter(
+        user -> !userHasVoted(user, idElection)
+    ).forEach(u -> this.voteRepository.save(Vote.builder()
+        .user(u)
+        .candidateByElection(getByCandidateAndElection(electionService.findById(idElection),
+            fakeVoteRequest.getCandidateId())).build()));
   }
 
   public Long getVotesByCandidateByElection(Long idCandidateByElection) {
