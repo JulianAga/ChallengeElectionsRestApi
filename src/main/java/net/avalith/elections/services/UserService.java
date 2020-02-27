@@ -121,4 +121,9 @@ public class UserService {
           userQuantity + " usuarios de " + quantity + " creados correctamente");
     }
   }
+
+  public List<User> getFakeUsers() {
+    return userRepository.findAllFakeUsers();
+
+  }
 }
