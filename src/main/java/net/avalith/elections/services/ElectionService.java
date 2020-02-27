@@ -157,4 +157,11 @@ public class ElectionService {
             .votes(voteService.getVotesByCandidateByElection(candidateByElection.getId()))
             .build()).collect(Collectors.toList());
   }
+
+  public List<Election> getActiveElections() {
+    return electionRepository.findAll().stream()
+        .filter(election -> election.getStartDate().isBefore(LocalDateTime.now()))
+        .filter(election -> election.getEndDate().isAfter(LocalDateTime.now()))
+        .collect(Collectors.toList());
+  }
 }

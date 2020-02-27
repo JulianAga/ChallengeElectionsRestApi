@@ -1,6 +1,8 @@
 package net.avalith.elections.services;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.avalith.elections.entities.ResponseMessage;
 import net.avalith.elections.entities.VoteRequest;
 import net.avalith.elections.models.CandidateByElection;
@@ -27,6 +29,9 @@ public class VoteService {
 
   @Autowired
   private ElectionService electionService;
+
+  @Autowired
+  private CandidateService candidateService;
 
   /**
    * insert method. Insert and save an user
@@ -96,4 +101,15 @@ public class VoteService {
         vote -> vote.getCandidateByElection().getElection().getId().equals(idElection)
     ).count();
   }
+
+  public Long getMaxVotesFromCandidate(Long idElection) {
+
+    List<Long> votes = electionService.findById(idElection).getCandidateByElections().stream()
+        .map(candidateByElection -> getVotesByCandidateByElection(candidateByElection.getId()))
+        .collect(
+            Collectors.toList());
+
+    return votes.stream().max(Comparator.comparing(Long::valueOf)).get();
+  }
+
 }
