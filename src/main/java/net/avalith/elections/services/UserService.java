@@ -135,6 +135,9 @@ public class UserService {
           this.update(c, c.getId());
         }
     );
+  }
 
+  public List<User> getFakeUsers() {
+    return userRepository.findAllFakeUsers();
   }
 }
