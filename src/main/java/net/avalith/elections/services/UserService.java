@@ -124,19 +124,10 @@ public class UserService {
     }
   }
 
-  public List<User> getTodayBirthdays() {
-    List<User> users = this.getAll().stream()
-        .filter(c -> !calculateAge(c.getDayOfBirth()).equals(c.getAge()))
-        .collect(Collectors.toList());
-    users.forEach(c-> c.setAge(this.calculateAge(c.getDayOfBirth())));
-    return users;
-  }
-
   public void reasignAge() {
-    this.getTodayBirthdays().forEach(c -> {
-          this.update(c, c.getId());
-        }
-    );
+    this.getAll().stream()
+        .filter(c -> !calculateAge(c.getDayOfBirth()).equals(c.getAge()))
+        .forEach(c-> c.setAge(this.calculateAge(c.getDayOfBirth())));
   }
 
   public List<User> getFakeUsers() {
