@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 public class ElectionHistoryService {
 
   @Autowired
-  ElectionHistoryRespository electionHistoryRespository;
+  private ElectionHistoryRespository electionHistoryRespository;
 
   @Autowired
-  ElectionService electionService;
+  private ElectionService electionService;
 
   @Autowired
-  VoteService voteService;
+  private VoteService voteService;
 
   public void generateHistory() {
 
