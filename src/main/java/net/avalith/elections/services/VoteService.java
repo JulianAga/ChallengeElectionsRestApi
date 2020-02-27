@@ -86,11 +86,12 @@ public class VoteService {
   }
 
   public void voteCandidateWithFakeVotes(Long idElection, VoteRequest fakeVoteRequest) {
+    Election election = electionService.findById(idElection);
     userService.getFakeUsers().stream().filter(
         user -> !userHasVoted(user, idElection)
     ).forEach(u -> this.voteRepository.save(Vote.builder()
         .user(u)
-        .candidateByElection(getByCandidateAndElection(electionService.findById(idElection),
+        .candidateByElection(getByCandidateAndElection(election,
             fakeVoteRequest.getCandidateId())).build()));
   }
 
